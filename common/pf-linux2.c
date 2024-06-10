@@ -89,10 +89,6 @@ int
 pfInit(char *interface, int mode, u_short protocol, int typ)
 {
   int s;
-  int ioarg;
-  char device[64];
-  unsigned long if_flags;
-
 
   { u_short prot;
 
@@ -137,8 +133,6 @@ pfInit(char *interface, int mode, u_short protocol, int typ)
 static int
 setup_pf(int s, int typ, u_short prot)
 {
-  int ioarg;
-  u_short offset;
   return(0);
 }
 
