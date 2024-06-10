@@ -250,7 +250,7 @@ pfRead(int fd, u_char *buf, int len)
 {
   int i, cc;
 
-  int fromlen;
+  socklen_t fromlen;
   struct sockaddr sa;
 
   RDS[0].dataLen = 0;
