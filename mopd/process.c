@@ -439,9 +439,9 @@ void
 mopProcessDL(FILE *fd, struct if_info *ii, const u_char *pkt, int *idx,
 	     const u_char *dst, const u_char *src, int trans, u_short len)
 {
-	u_char  tmpc;
+	u_char  tmpc, mopcode;
 	u_short moplen;
-	u_char  pfile[129], mopcode;
+	char    pfile[129];
 	char    filename[FILENAME_MAX];
 	char    line[100];
 	int     i, nfd;
