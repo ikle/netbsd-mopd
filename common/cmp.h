@@ -31,7 +31,7 @@
 #define _CMP_H_
 
 __BEGIN_DECLS
-int	mopCmpEAddr(const u_char *, const u_char *);
+int	mopCmpEAddr(const void *, const void *);
 __END_DECLS
 
 #endif /* _CMP_H_ */

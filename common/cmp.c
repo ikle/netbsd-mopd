@@ -33,7 +33,7 @@ __RCSID("$NetBSD: cmp.c,v 1.6 2016/06/08 01:11:49 christos Exp $");
 #include "cmp.h"
 
 int
-mopCmpEAddr(const u_char *addr1, const u_char *addr2)
+mopCmpEAddr(const void *addr1, const void *addr2)
 {
         return(memcmp(addr1, addr2, 6));
 }
