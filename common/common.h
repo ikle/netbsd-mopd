@@ -36,7 +36,7 @@
 #define HDRSIZ		22		/* room for 803.2 header	*/
 
 #ifndef MOP_FILE_PATH
-#define MOP_FILE_PATH	"/tftpboot/mop"
+#define MOP_FILE_PATH	"/srv/tftp/mop"
 #endif
 
 #define DEBUG_ONELINE	1
