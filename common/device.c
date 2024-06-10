@@ -89,6 +89,7 @@ deviceOpen(const char *ifname, u_short proto, int trans)
 {
 	struct if_info *p, tmp;
 
+	tmp.fd = -1;
 	strlcpy(tmp.if_name, ifname, sizeof(tmp.if_name));
 	tmp.iopen   = pfInit;
 	
