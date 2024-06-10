@@ -63,12 +63,13 @@ mopPutLong(u_char *pkt, int *idx, u_int32_t value)
 }
 
 void
-mopPutMulti(u_char *pkt, int *idx, const u_char *value, int size)
+mopPutMulti(u_char *pkt, int *idx, const void *value, int size)
 {
+	const u_char *v = value;
 	int i;
 
 	for (i = 0; i < size; i++) {
-	  pkt[*idx+i] = value[i];
+	  pkt[*idx+i] = v[i];
 	}  
 	*idx = *idx + size;
 }

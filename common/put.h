@@ -34,7 +34,7 @@ __BEGIN_DECLS
 void	mopPutChar(u_char *, int *, u_char);
 void	mopPutShort(u_char *, int *, u_short);
 void	mopPutLong(u_char *, int *, u_int32_t);
-void	mopPutMulti(u_char *, int *, const u_char *, int);
+void	mopPutMulti(u_char *, int *, const void *, int);
 void	mopPutTime(u_char *, int *, time_t);
 void	mopPutHeader(u_char *, int *, const u_char *, const u_char *, u_short, int);
 void	mopPutLength(u_char *, int, u_short);
