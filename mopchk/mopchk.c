@@ -97,7 +97,7 @@ main(int argc, char  **argv)
 		else {
 			printf("Interface Address\n");
 			for (ii = iflist; ii; ii = ii->next)
-				printf("%-9s %x:%x:%x:%x:%x:%x\n",
+				printf("%-9s %02x:%02x:%02x:%02x:%02x:%02x\n",
 				    ii->if_name, ii->eaddr[0], ii->eaddr[1],
 				    ii->eaddr[2], ii->eaddr[3], ii->eaddr[4],
 				    ii->eaddr[5]);
