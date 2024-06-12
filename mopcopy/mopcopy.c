@@ -169,30 +169,24 @@ main(int argc, char **argv)
 	fwrite (header, sizeof (header), 1, out);
 
 	switch (dl.image_type) {
-	case IMAGE_TYPE_MOP:
-		abort();
-
+#ifndef NOELF
 	case IMAGE_TYPE_ELF32:
-#ifdef NOELF
-		abort();
-#else
 		fprintf(stderr, "copying ");
 		for (j = 0; j < dl.e_nsec; j++)
 			fprintf(stderr, "%s%u+%u", j == 0 ? "" : "+",
 			    dl.e_sections[j].s_fsize,
 			    dl.e_sections[j].s_pad);
 		fprintf(stderr, "->0x%x\n", dl.xferaddr);
-#endif
 		break;
-
+#endif
+#ifndef NOAOUT
 	case IMAGE_TYPE_AOUT:
-#ifdef NOAOUT
-		abort();
-#else
 		fprintf(stderr, "copying %u+%u+%u->0x%x\n", dl.a_text,
 		    dl.a_data, dl.a_bss, dl.xferaddr);
-#endif
 		break;
+#endif
+	default:
+		abort();
 	}
 	
 	while ((i = mopFileRead(&dl,header)) > 0) {
