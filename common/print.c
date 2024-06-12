@@ -45,14 +45,8 @@ __RCSID("$NetBSD: print.c,v 1.8 2016/06/08 01:11:49 christos Exp $");
 void
 mopPrintHWA(FILE *fd, const u_char *ap)
 {
-	(void)fprintf(fd, "%x:%x:%x:%x:%x:%x",
+	(void)fprintf(fd, "%02x:%02x:%02x:%02x:%02x:%02x",
 		      ap[0],ap[1],ap[2],ap[3],ap[4],ap[5]);
-	if (ap[0] < 10) (void)fprintf(fd, " ");
-	if (ap[1] < 10) (void)fprintf(fd, " ");
-	if (ap[2] < 10) (void)fprintf(fd, " ");
-	if (ap[3] < 10) (void)fprintf(fd, " ");
-	if (ap[4] < 10) (void)fprintf(fd, " ");
-	if (ap[5] < 10) (void)fprintf(fd, " ");
 }
 
 void
