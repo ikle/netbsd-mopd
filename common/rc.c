@@ -82,14 +82,16 @@ mopDumpRC(FILE *fd, const u_char *pkt, int trans)
 			
 			control = mopGetChar(pkt,&idx);	/* Control */
 			(void)fprintf(fd,"Control    :   %02x ",control);
-			if ((control & (1>>MOP_K_BOT_CNTL_SERVER))) {
+
+			if ((control & (1 << MOP_K_BOT_CNTL_SERVER))) {
 				(void)fprintf(fd,
 					      "Bootserver Requesting system ");
 			} else {
 				(void)fprintf(fd,
 					      "Bootserver System default ");
 			}
-			if ((control & (1>>MOP_K_BOT_CNTL_DEVICE))) {
+
+			if ((control & (1 << MOP_K_BOT_CNTL_DEVICE))) {
 				(void)fprintf(fd,
 					      "Bootdevice Specified device");
 			} else {
@@ -98,7 +100,7 @@ mopDumpRC(FILE *fd, const u_char *pkt, int trans)
 			}
 			(void)fprintf(fd,"\n");
 			
-			if ((control & (1>>MOP_K_BOT_CNTL_DEVICE))) {
+			if ((control & (1 << MOP_K_BOT_CNTL_DEVICE))) {
 				tmpc = mopGetChar(pkt,&idx);/* Device ID */
 				(void)fprintf(fd,
 					      "Device ID    :   %02x '",tmpc);
