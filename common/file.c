@@ -179,6 +179,22 @@ CheckMopFile(int fd)
 	return(0);
 }
 
+static inline u_int16_t get_le16 (const void *data)
+{
+	const u_int8_t *p = data;
+	const u_int16_t a = p[0], b = p[1];
+
+	return b << 8 | a;
+}
+
+static inline u_int32_t get_le32 (const void *data)
+{
+	const u_int8_t *p = data;
+	const u_int32_t a = p[0], b = p[1], c = p[2], d = p[3];
+
+	return d << 24 | c << 16 | b << 8 | a;
+}
+
 int
 GetMopFileInfo(struct dllist *dl)
 {
@@ -191,25 +207,19 @@ GetMopFileInfo(struct dllist *dl)
 	if (read(dl->ldfd, header, 512) != 512)
 		return(-1);
 
-	image_type = (u_short)(header[IHD_W_ALIAS+1]*256 +
-			       header[IHD_W_ALIAS]);
+	image_type = get_le16(header + IHD_W_ALIAS);
 
 	switch(image_type) {
 		case IHD_C_NATIVE:		/* Native mode image (VAX)   */
-			isd = (header[IHD_W_SIZE+1]*256 +
-			       header[IHD_W_SIZE]);
-			iha = (header[IHD_W_ACTIVOFF+1]*256 +
-			       header[IHD_W_ACTIVOFF]);
-			hbcnt = (header[IHD_B_HDRBLKCNT]);
-			isize = (header[isd+ISD_W_PAGCNT+1]*256 +
-				 header[isd+ISD_W_PAGCNT]) * 512;
-			load_addr = ((header[isd+ISD_V_VPN+1]*256 +
-				      header[isd+ISD_V_VPN]) & ISD_M_VPN)
-					* 512;
-			xfr_addr = (header[iha+IHA_L_TFRADR1+3]*0x1000000 +
-				    header[iha+IHA_L_TFRADR1+2]*0x10000 +
-				    header[iha+IHA_L_TFRADR1+1]*0x100 +
-				    header[iha+IHA_L_TFRADR1]) & 0x7fffffff;
+			isd       = get_le16(header + IHD_W_SIZE);
+			iha       = get_le16(header + IHD_W_ACTIVOFF);
+			hbcnt     = header[IHD_B_HDRBLKCNT];
+			isize     = get_le16(header + isd + ISD_W_PAGCNT) * 512;
+			load_addr = (get_le16(header + isd + ISD_V_VPN) &
+				     ISD_M_VPN) * 512;
+			xfr_addr  = get_le32(header + iha + IHA_L_TFRADR1) &
+				    0x7fffffffu;
+
 			printf("Native Image (VAX)\n");
 			printf("Header Block Count: %d\n",hbcnt);
 			printf("Image Size:         %08x\n",isize);
@@ -217,10 +227,11 @@ GetMopFileInfo(struct dllist *dl)
 			printf("Transfer Address:   %08x\n",xfr_addr);
 			break;
 		case IHD_C_RSX:			/* RSX image produced by TKB */
-			hbcnt = header[L_BBLK+1]*256 + header[L_BBLK];
-			isize = (header[L_BLDZ+1]*256 + header[L_BLDZ]) * 64;
-			load_addr = header[L_BSA+1]*256 + header[L_BSA];
-			xfr_addr  = header[L_BXFR+1]*256 + header[L_BXFR];
+			hbcnt     = get_le16(header + L_BBLK);
+			isize     = get_le16(header + L_BLDZ) * 64;
+			load_addr = get_le16(header + L_BSA);
+			xfr_addr  = get_le16(header + L_BXFR);
+
 			printf("RSX Image\n");
 			printf("Header Block Count: %d\n",hbcnt);
 			printf("Image Size:         %08x\n",isize);
@@ -240,19 +251,13 @@ GetMopFileInfo(struct dllist *dl)
 			return(-1);
 			break;
 		case IHD_C_PMAX:		/* PMAX system image	     */
-			isd = (header[IHD_W_SIZE+1]*256 +
-			       header[IHD_W_SIZE]);
-			iha = (header[IHD_W_ACTIVOFF+1]*256 +
-			       header[IHD_W_ACTIVOFF]);
-			hbcnt = (header[IHD_B_HDRBLKCNT]);
-			isize = (header[isd+ISD_W_PAGCNT+1]*256 +
-				 header[isd+ISD_W_PAGCNT]) * 512;
-			load_addr = (header[isd+ISD_V_VPN+1]*256 +
-				     header[isd+ISD_V_VPN]) * 512;
-			xfr_addr = (header[iha+IHA_L_TFRADR1+3]*0x1000000 +
-				    header[iha+IHA_L_TFRADR1+2]*0x10000 +
-				    header[iha+IHA_L_TFRADR1+1]*0x100 +
-				    header[iha+IHA_L_TFRADR1]);
+			isd       = get_le16(header + IHD_W_SIZE);
+			iha       = get_le16(header + IHD_W_ACTIVOFF);
+			hbcnt     = header[IHD_B_HDRBLKCNT];
+			isize     = get_le16(header + isd + ISD_W_PAGCNT) * 512;
+			load_addr = get_le16(header + isd + ISD_V_VPN) * 512;
+			xfr_addr  = get_le32(header + iha + IHA_L_TFRADR1);
+
 			printf("PMAX Image \n");
 			printf("Header Block Count: %d\n",hbcnt);
 			printf("Image Size:         %08x\n",isize);
@@ -260,20 +265,12 @@ GetMopFileInfo(struct dllist *dl)
 			printf("Transfer Address:   %08x\n",xfr_addr);
 			break;
 		case IHD_C_ALPHA:		/* ALPHA system image	     */
-			isd = (header[EIHD_L_ISDOFF+3]*0x1000000 +
-			       header[EIHD_L_ISDOFF+2]*0x10000 +
-			       header[EIHD_L_ISDOFF+1]*0x100 +
-			       header[EIHD_L_ISDOFF]);
-			hbcnt = (header[EIHD_L_HDRBLKCNT+3]*0x1000000 +
-				 header[EIHD_L_HDRBLKCNT+2]*0x10000 +
-				 header[EIHD_L_HDRBLKCNT+1]*0x100 +
-				 header[EIHD_L_HDRBLKCNT]);
-			isize = (header[isd+EISD_L_SECSIZE+3]*0x1000000 +
-				 header[isd+EISD_L_SECSIZE+2]*0x10000 +
-				 header[isd+EISD_L_SECSIZE+1]*0x100 +
-				 header[isd+EISD_L_SECSIZE]);
+			isd       = get_le32(header + EIHD_L_ISDOFF);
+			hbcnt     = get_le32(header + EIHD_L_HDRBLKCNT);
+			isize     = get_le32(header + isd + EISD_L_SECSIZE);
 			load_addr = 0;
-			xfr_addr = 0;
+			xfr_addr  = 0;
+
 			printf("Alpha Image \n");
 			printf("Header Block Count: %d\n",hbcnt);
 			printf("Image Size:         %08x\n",isize);
