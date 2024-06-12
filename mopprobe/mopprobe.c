@@ -249,7 +249,7 @@ mopProcess(struct if_info *ii, u_char *pkt)
 					idx = idx + 2;
 					break;
 				case 105:
-					(void)fprintf(stdout,"%x:%x:%x:%x:%x:%x\t",
+					(void)fprintf(stdout,"%02x:%02x:%02x:%02x:%02x:%02x\t",
 						      src[0],src[1],src[2],src[3],src[4],src[5]);
 					for (i = 0; i < ilen; i++) {
 					  (void)fprintf(stdout, "%c",pkt[idx+i]);
