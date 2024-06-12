@@ -349,7 +349,7 @@ mopNextLoad(const u_char *dst, const u_char *src, u_char new_count, int trans)
 		dle->ldfd = -1;
 		dle->status = DL_STATUS_FREE;
 		snprintf(line, sizeof(line),
-			"%x:%x:%x:%x:%x:%x Load completed",
+			"%02x:%02x:%02x:%02x:%02x:%02x Load completed",
 			dst[0],dst[1],dst[2],dst[3],dst[4],dst[5]);
 		syslog(LOG_INFO, "%s", line);
 		return;
@@ -554,12 +554,12 @@ mopProcessDL(FILE *fd, struct if_info *ii, const u_char *pkt, int *idx,
 				close(nfd);
 				mopSendASV(src, ii->eaddr, ii, trans);
 				snprintf(line, sizeof(line),
-					"%x:%x:%x:%x:%x:%x (%d) Do you have %s? (Yes)",
+					"%02x:%02x:%02x:%02x:%02x:%02x (%d) Do you have %s? (Yes)",
 					src[0],src[1],src[2],
 					src[3],src[4],src[5],trans,pfile);
 			} else {
 				snprintf(line, sizeof(line),
-					"%x:%x:%x:%x:%x:%x (%d) Do you have %s? (No)",
+					"%02x:%02x:%02x:%02x:%02x:%02x (%d) Do you have %s? (No)",
 					src[0],src[1],src[2],
 					src[3],src[4],src[5],trans,pfile);
 			}
@@ -569,7 +569,7 @@ mopProcessDL(FILE *fd, struct if_info *ii, const u_char *pkt, int *idx,
 				dl_rpr->ldfd = open(filename, O_RDONLY, 0);
 				mopStartLoad(src, ii->eaddr, dl_rpr, trans);
 				snprintf(line, sizeof(line),
-					"%x:%x:%x:%x:%x:%x Send me %s",
+					"%02x:%02x:%02x:%02x:%02x:%02x Send me %s",
 					src[0],src[1],src[2],
 					src[3],src[4],src[5],pfile);
 				syslog(LOG_INFO, "%s", line);
