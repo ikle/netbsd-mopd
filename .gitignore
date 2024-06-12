@@ -1,4 +1,5 @@
 *.o
+*.swp
 common/libcommon.a
 common/version.c
 mopchk/mopchk
