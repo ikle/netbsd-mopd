@@ -160,7 +160,7 @@ main(int argc, char **argv)
 	mopFilePutLX(header,0x30+IHA_L_TFRADR1,dl.xferaddr,4); /* Xfer Addr */
 	mopFilePutLX(header,0xd4+ISD_W_PAGCNT,i,2);/* Imagesize in blks.*/
 	
-	out = fopen (argv[2], "w");
+	out = fopen (argv[2], "wb");
 	if (!out)
 		err(2, "writing `%s'", argv[2]);
 	
